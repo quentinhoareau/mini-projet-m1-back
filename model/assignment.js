@@ -22,5 +22,4 @@ let AssignmentSchema = mongoose.Schema({
 
 
 AssignmentSchema.plugin(aggregatePaginate);
-// C'est à travers ce modèle Mongoose qu'on pourra faire le CRUD
 module.exports = mongoose.model("Assignment", AssignmentSchema);

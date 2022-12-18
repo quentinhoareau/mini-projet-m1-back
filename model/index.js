@@ -1,7 +1,6 @@
 
 const eleve = require('../model/eleve');
 const matiere = require('../model/matiere');
-
 const assignment = require('../model/assignment');
 
 

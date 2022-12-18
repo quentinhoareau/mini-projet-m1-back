@@ -2,6 +2,8 @@ let express = require('express');
 let app = express();
 let bodyParser = require('body-parser');
 let assignment = require('./routes/assignments');
+let matieres = require('./routes/matieres');
+let eleves = require('./routes/eleves');
 
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -43,6 +45,12 @@ const prefix = '/api';
 
 app.route(prefix + '/assignments')
   .get(assignment.getAssignments);
+
+app.route(prefix + '/matieres')
+  .get(matieres.getMatieres);
+
+app.route(prefix + '/eleves')
+  .get(eleves.getEleves);
 
 app.route(prefix + '/assignments/:id')
   .get(assignment.getAssignment)
