@@ -1,7 +1,8 @@
-let Eleve = require('../model/index').eleve;
+const db = require("../models");
+const Eleve = db.eleve;
 
 // Récupérer tous les assignments (GET)
-function getEleves(req, res) {
+exports.getEleves = (req, res) => {
     Eleve.find((err, eleves) => {
         res.json(eleves);
     }
@@ -10,7 +11,7 @@ function getEleves(req, res) {
 }
 
 // Récupérer un eleve par son id (GET)
-function getEleve(req, res, next) {
+exports.getEleve = (req, res, next) => {
     let assignmentId = req.params.id;
 
     console.log("assignmentId", assignmentId)
@@ -21,10 +22,5 @@ function getEleve(req, res, next) {
         res.json(eleve);
     }).populate('eleve').populate('eleve');
 
-
-
 }
 
-
-
-module.exports = { getEleves, getEleve };

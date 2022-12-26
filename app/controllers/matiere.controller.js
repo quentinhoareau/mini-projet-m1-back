@@ -1,16 +1,16 @@
-let Matiere = require('../model/index').matiere;
+const db = require("../models");
+const Matiere = db.matiere;
 
 // Récupérer tous les assignments (GET)
-function getMatieres(req, res) {
+exports.getMatieres = (req, res) => {
     Matiere.find((err, matieres) => {
         res.json(matieres);
     }
     )
-
 }
 
 // Récupérer un matiere par son id (GET)
-function getMatiere(req, res, next) {
+exports.getMatiere = (req, res, next) => {
     let assignmentId = req.params.id;
 
     console.log("assignmentId", assignmentId)
@@ -21,10 +21,5 @@ function getMatiere(req, res, next) {
         res.json(matiere);
     }).populate('matiere').populate('eleve');
 
-
-
 }
 
-
-
-module.exports = { getMatieres, getMatiere };
