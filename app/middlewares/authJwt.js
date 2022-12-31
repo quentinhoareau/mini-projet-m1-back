@@ -44,14 +44,14 @@ isAdmin = (req, res, next) => {
           }
         }
 
-        res.status(403).send({ message: "Require ADMIN Role!" });
+        res.status(403).send({ message: "Le role ADMIN est requis" });
         return;
       }
     );
   });
 };
 
-isUser = (req, res, next) => {
+isUserOrAdmin = (req, res, next) => {
   User.findById(req.userId).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
@@ -69,13 +69,13 @@ isUser = (req, res, next) => {
         }
 
         for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === "user") {
+          if (roles[i].name === "USER" || roles[i].name === "ADMIN") {
             next();
             return;
           }
         }
 
-        res.status(403).send({ message: "Require User Role!" });
+        res.status(403).send({ message: "Le role USER ou ADMIN est requis" });
         return;
       }
     );
@@ -85,6 +85,6 @@ isUser = (req, res, next) => {
 const authJwt = {
   verifyToken,
   isAdmin,
-  isUser
+  isUserOrAdmin
 };
 module.exports = authJwt;

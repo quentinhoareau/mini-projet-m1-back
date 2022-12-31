@@ -1,4 +1,5 @@
 const controller = require("../controllers/assignment.controller");
+const { authJwt } = require("../middlewares");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -21,16 +22,19 @@ module.exports = function(app) {
 
   app.delete(
     "/api/assignments/:id",
+    [authJwt.verifyToken, authJwt.isAdmin],
     controller.deleteAssignment
   );
 
   app.post(
     "/api/assignments",
+    [authJwt.verifyToken, authJwt.isUserOrAdmin],
     controller.postAssignment
   );
 
   app.put(
     "/api/assignments",
+    [authJwt.verifyToken, authJwt.isUserOrAdmin],
     controller.updateAssignment
   );
 

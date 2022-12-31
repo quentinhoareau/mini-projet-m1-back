@@ -1,66 +1,9 @@
 const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.user;
-const Role = db.role;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
-
-exports.signup = (req, res) => {
-  const user = new User({
-    username: req.body.username,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8)
-  });
-
-  user.save((err, user) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
-
-    if (req.body.roles) {
-      Role.find(
-        {
-          name: { $in: req.body.roles }
-        },
-        (err, roles) => {
-          if (err) {
-            res.status(500).send({ message: err });
-            return;
-          }
-
-          user.roles = roles.map(role => role._id);
-          user.save(err => {
-            if (err) {
-              res.status(500).send({ message: err });
-              return;
-            }
-
-            res.send({ message: "User was registered successfully!" });
-          });
-        }
-      );
-    } else {
-      Role.findOne({ name: "user" }, (err, role) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
-
-        user.roles = [role._id];
-        user.save(err => {
-          if (err) {
-            res.status(500).send({ message: err });
-            return;
-          }
-
-          res.send({ message: "User was registered successfully!" });
-        });
-      });
-    }
-  });
-};
 
 exports.signin = (req, res) => {
   User.findOne({
@@ -74,7 +17,7 @@ exports.signin = (req, res) => {
       }
 
       if (!user) {
-        return res.status(404).send({ message: "User Not found." });
+        return res.status(404).send({ message: "Utilisateur non trouvé." });
       }
 
       var passwordIsValid = bcrypt.compareSync(
@@ -85,7 +28,7 @@ exports.signin = (req, res) => {
       if (!passwordIsValid) {
         return res.status(401).send({
           accessToken: null,
-          message: "Invalid Password!"
+          message: "Mot de passe invalide!"
         });
       }
 
@@ -109,11 +52,23 @@ exports.signin = (req, res) => {
 };
 
 exports.getLoggedUser = (req, res) => {
-  User.findById(req.userId).populate("roles", "-__v").exec((err, user) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
+  let token = req.headers["x-access-token"];
+
+  jwt.verify(token, config.secret, (err, decoded) => {
+    
+    if(decoded){
+      User.findById(decoded.id).populate("roles", "-__v").exec((err, user) => {
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+        res.status(200).send(user);
+      });
+    }else{
+      res.status(200).send()
     }
-    res.status(200).send(user);
+    
+
   });
+ 
 };
