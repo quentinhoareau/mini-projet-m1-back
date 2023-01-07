@@ -5,7 +5,7 @@ const dbConfig = require("./app/config/db.config");
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:4200",
+  origin: "https://snazzy-rugelach-497ac7.netlify.app",
   credentials: true,
 };
 
