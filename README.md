@@ -7,3 +7,9 @@
 
 Pour récupérer la partie front du projet dirigez vous ici : 
 [Mini Projet M1 Angular front](https://github.com/quentinhoareau)
+
+# Contributions 
+Le projet à été fait seul par HOAREAU Quentin (front et back).
+
+# Détail du travail attendu
+Tous les attentes ont été implémentées sur le projet, également les options AVANCEES et AVANCE++.
